@@ -173,13 +173,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - Inspired by Bash, Zsh, and other Unix shells
 - Built with Python's readline and subprocess modules
-
-## 📧 Contact
-
-Your Name - [@yourtwitter](https://twitter.com/yourtwitter)
-
-Project Link: [https://github.com/yourusername/pyshell](https://github.com/yourusername/pyshell)
-
----
-
-⭐ Star this repo if you find it helpful!
