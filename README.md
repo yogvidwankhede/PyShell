@@ -51,8 +51,6 @@ pip install -e .
 
 ### Using pip (once published)
 =======
-### From PyPI (Recommended)
->>>>>>> 67b72237e43628121a4037151f7c4d84f5fe85f0
 
 ```bash
 pip install pyshell-terminal
