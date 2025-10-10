@@ -5,19 +5,19 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="pyshell-terminal",
-    version="1.0.2",  # ⬅ bump version before upload
+    version="1.0.4",  # ⬅ bump version
     author="Yogvid Wankhede",
-    author_email="https://yogvidwankhede.com",  # 🌐 replaced email with website
+    author_email="yogvidwankhede@gmail.com",  # must be valid format
     description="A feature-rich, POSIX-compatible shell implemented in Python with advanced scripting capabilities.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/yogvidwankhede/PyShell",
     project_urls={
+        "Website": "https://yogvidwankhede.com", 
         "Homepage": "https://github.com/yogvidwankhede/PyShell",
         "Documentation": "https://github.com/yogvidwankhede/PyShell/wiki",
         "Bug Reports": "https://github.com/yogvidwankhede/PyShell/issues",
         "Source": "https://github.com/yogvidwankhede/PyShell",
-        "Website": "https://yogvidwankhede.com",
     },
     license="MIT",
     classifiers=[
