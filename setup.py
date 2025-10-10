@@ -5,15 +5,21 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="pyshell-terminal",
-    version="1.0.1",
+    version="1.0.2",  # ⬅ bump version before upload
     author="Yogvid Wankhede",
-    author_website="yogvidwankhede.com",
-    author_email="yogvidwankhede@gmail.com",
-    description="A feature-rich POSIX-compatible shell implemented in Python",
+    author_email="https://yogvidwankhede.com",  # 🌐 replaced email with website
+    description="A feature-rich, POSIX-compatible shell implemented in Python with advanced scripting capabilities.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/yogvidwankhede/PyShell",
-    packages=find_packages(),
+    project_urls={
+        "Homepage": "https://github.com/yogvidwankhede/PyShell",
+        "Documentation": "https://github.com/yogvidwankhede/PyShell/wiki",
+        "Bug Reports": "https://github.com/yogvidwankhede/PyShell/issues",
+        "Source": "https://github.com/yogvidwankhede/PyShell",
+        "Website": "https://yogvidwankhede.com",
+    },
+    license="MIT",
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
@@ -30,6 +36,7 @@ setup(
         "Operating System :: POSIX",
         "Operating System :: Microsoft :: Windows",
     ],
+    packages=find_packages(),
     python_requires=">=3.7",
     install_requires=[
         "readline; platform_system!='Windows'",
@@ -47,10 +54,5 @@ setup(
         "console_scripts": [
             "pyshell=main:repl",
         ],
-    },
-    project_urls={
-        "Bug Reports": "https://github.com/yourusername/pyshell/issues",
-        "Source": "https://github.com/yourusername/pyshell",
-        "Documentation": "https://github.com/yourusername/pyshell/wiki",
     },
 )
