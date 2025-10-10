@@ -25,7 +25,7 @@ A feature-rich, POSIX-compatible shell implemented in Python with advanced scrip
 
 ```bash
 git clone https://github.com/yogvidwankhede/PyShell.git
-cd pyshell
+cd PyShell
 pip install -e .
 ```
 
