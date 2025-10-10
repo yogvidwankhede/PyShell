@@ -1,10 +1,15 @@
 # 🐚 PyShell — A Feature-Rich POSIX-Compatible Shell in Python
 
 [![PyPI version](https://img.shields.io/pypi/v/pyshell-terminal.svg)](https://pypi.org/project/pyshell-terminal/)
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 [![Python 3.7+](https://img.shields.io/badge/python-3.7+-blue.svg)](https://www.python.org/downloads/)
+
 [![Website](https://img.shields.io/badge/Website-yogvidwankhede.com-blue)](https://yogvidwankhede.com)
+
 [![GitHub Repo](https://img.shields.io/badge/GitHub-PyShell-black?logo=github)](https://github.com/yogvidwankhede/PyShell)
+
 [![PyPI Project](https://img.shields.io/badge/PyPI-pyshell--terminal-orange?logo=pypi)](https://pypi.org/project/pyshell-terminal/)
 
 ---
