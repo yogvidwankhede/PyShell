@@ -6,12 +6,13 @@ with open("README.md", "r", encoding="utf-8") as fh:
 setup(
     name="pyshell-terminal",
     version="1.0.0",
-    author="Your Name",
-    author_email="your.email@example.com",
+    author="Yogvid Wankhede",
+    author_website="yogvidwankhede.com",
+    author_email="yogvidwankhede@gmail.com",
     description="A feature-rich POSIX-compatible shell implemented in Python",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/yourusername/pyshell",
+    url="https://github.com/yogvidwankhede/PyShell",
     packages=find_packages(),
     classifiers=[
         "Development Status :: 4 - Beta",
