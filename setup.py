@@ -13,11 +13,12 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/yogvidwankhede/PyShell",
     project_urls={
-        "Website": "https://yogvidwankhede.com", 
         "Homepage": "https://github.com/yogvidwankhede/PyShell",
+        "Website": "https://yogvidwankhede.com", 
+        "Github": "https://github.com/yogvidwankhede",
+        "LinkedIN": "https://www.linkedin.com/in/yogvid-wankhede-149103231",
         "Documentation": "https://github.com/yogvidwankhede/PyShell/wiki",
         "Bug Reports": "https://github.com/yogvidwankhede/PyShell/issues",
-        "Source": "https://github.com/yogvidwankhede/PyShell",
     },
     license="MIT",
     classifiers=[
