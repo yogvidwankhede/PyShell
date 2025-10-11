@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>pyshell</id>
+    <version>1.1.0</version>
+    <packageSourceUrl>https://github.com/yogvidwankhede/PyShell</packageSourceUrl>
+    <owners>Yogvid Wankhede</owners>
+    <title>PyShell - POSIX Shell in Python</title>
+    <authors>Yogvid Wankhede</authors>
+    <projectUrl>https://yogvidwankhede.com/pyshell</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/yogvidwankhede/PyShell/main/assets/icon.png</iconUrl>
+    <copyright>2025 Yogvid Wankhede</copyright>
+    <licenseUrl>https://github.com/yogvidwankhede/PyShell/blob/main/LICENSE</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectSourceUrl>https://github.com/yogvidwankhede/PyShell</projectSourceUrl>
+    <docsUrl>https://yogvidwankhede.com/pyshell/docs</docsUrl>
+    <bugTrackerUrl>https://github.com/yogvidwankhede/PyShell/issues</bugTrackerUrl>
+    <tags>shell bash terminal cli python posix scripting command-line</tags>
+    <summary>A feature-rich, POSIX-compatible shell implemented in Python with advanced scripting capabilities</summary>
+    <description>
+# PyShell - Feature-Rich POSIX Shell in Python
+
+PyShell is a powerful, cross-platform shell implementation in Python that brings Unix-style scripting to any environment.
+
+## Features
+
+- **POSIX Compatibility**: Standard shell syntax (if, while, for, case)
+- **Advanced Arrays**: Indexed and associative arrays
+- **Pipeline Support**: Full pipe, redirection, and background job control
+- **Function Definitions**: Shell functions with local variables
+- **Parameter Expansion**: ${var:-default}, ${var#pattern}, etc.
+- **Command Substitution**: $(command) and backtick syntax
+- **Arithmetic Expansion**: $((expression)) with full math operations
+- **Brace Expansion**: {1..10}, {a,b,c}
+- **50+ Built-in Commands**: cd, echo, export, test, local, grep, wc, etc.
+- **Job Control**: Background jobs with fg/bg
+- **Cross-Platform**: Works on Windows, macOS, and Linux
+
+## Installation
+
+After installing via Chocolatey, run:
