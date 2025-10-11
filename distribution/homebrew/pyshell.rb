@@ -3,7 +3,7 @@ class Pyshell < Formula
 
   desc "Feature-rich POSIX-compatible shell implemented in Python"
   homepage "https://github.com/yogvidwankhede/PyShell"
-  url "https://files.pythonhosted.org/packages/source/p/pyshell-terminal/pyshell-terminal-1.1.0.tar.gz"
+  url "https://files.pythonhosted.org/packages/source/p/pyshell-terminal/pyshell-terminal-1.1.2.tar.gz"
   sha256 "CCB70B577051F581EECB76E8E3BAC94CDE5C3D46C16BBEC0B0DC50A8C884598F"
   license "MIT"
 

@@ -1,9 +1,9 @@
 {
-    "version": "1.1.0",
+    "version": "1.1.2",
     "description": "A feature-rich, POSIX-compatible shell implemented in Python",
     "homepage": "https://github.com/yogvidwankhede/PyShell",
     "license": "MIT",
-    "url": "https://github.com/yogvidwankhede/PyShell/releases/download/v1.1.0/pyshell.exe",
+    "url": "https://github.com/yogvidwankhede/PyShell/releases/download/v1.1.2/pyshell.exe",
     "hash": "YOUR_SHA256_HERE",
     "bin": "pyshell.exe",
     "checkver": {
