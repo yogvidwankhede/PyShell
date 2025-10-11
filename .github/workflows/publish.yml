@@ -9,11 +9,7 @@ on:
 jobs:
   build-test-publish:
     name: Build, Test, and Publish
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: [3.9, 3.11]
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
@@ -22,7 +18,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: "3.11"
 
       - name: Install dependencies
         run: |
@@ -33,11 +29,9 @@ jobs:
         run: pytest -v
 
       - name: Build package
-        if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
         run: python -m build
 
       - name: Publish to PyPI
-        if: matrix.os == 'ubuntu-latest' && matrix.python-version == '3.11'
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
