@@ -2,7 +2,7 @@ $ErrorActionPreference = 'Stop'
 
 $toolsDir = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 $packageName = 'pyshell'
-$url64 = 'https://github.com/yogvidwankhede/PyShell/releases/download/v1.1.0/pyshell.exe'
+$url64 = 'https://github.com/yogvidwankhede/PyShell/releases/download/v1.1.1/pyshell.exe'
 $exePath = Join-Path $toolsDir 'pyshell.exe'
 
 # Download the binary from GitHub
