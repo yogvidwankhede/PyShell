@@ -22,27 +22,28 @@ jobs:
       
       - name: Install dependencies
         run: |
-          pip install -U pip setuptools wheel
-          pip install -r requirements.txt
-          pip install -e .
+          python -m pip install --upgrade pip setuptools wheel
+          python -m pip install -r requirements.txt
+          python -m pip install -e .
       
       - name: Verify installation
         run: |
-          python -c "import pyshell; print('PyShell package imported successfully')"
-          python -c "import pytest; print(f'Pytest version: {pytest.__version__}')"
+          python -c "import pyshell; print('✓ PyShell package imported successfully')"
+          python -c "import pytest; print(f'✓ Pytest version: {pytest.__version__}')"
+          python -c "import rich; print('✓ Rich imported')"
+          python -c "import questionary; print('✓ Questionary imported')"
       
       - name: List test files
         run: |
           echo "Test files found:"
           ls -la tests/
+          echo ""
+          echo "Test runner exists:"
+          ls -la tests/run_all_tests.py
       
-      - name: Run tests
+      - name: Run tests with Python
         run: |
           cd tests
           python run_all_tests.py
-        continue-on-error: false
-      
-      - name: Run pytest directly (fallback)
-        if: failure()
-        run: |
-          pytest tests/ -v --tb=short
+        env:
+          PYTHONPATH: ${{ github.workspace }}
