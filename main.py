@@ -1,12 +1,13 @@
 """
-PyShell main entry point – Full-screen TUI Edition.
+PyShell main entry point – Full-screen TUI Edition with CWD support.
 
 Features:
-- Two built-in themes: "Dark Modern" and "Light Modern".
-- A true full-screen UI with prompt_toolkit for a stable background.
-- A simplified, traditional shell-like interface where the prompt follows the output.
-- The entire screen is a single, scrollable history buffer.
-- Retains the original installer wizard and intro animation.
+- Opens in the current working directory (matching standard shells)
+- Two built-in themes: "Dark Modern" and "Light Modern"
+- A true full-screen UI with prompt_toolkit for a stable background
+- A simplified, traditional shell-like interface where the prompt follows the output
+- The entire screen is a single, scrollable history buffer
+- Retains the original installer wizard and intro animation
 """
 
 import sys
@@ -34,10 +35,9 @@ from prompt_toolkit.styles import Style as PromptStyle
 from prompt_toolkit.lexers import Lexer
 
 # These imports are assumed to be in a 'pyshell' package/directory.
-# Mock them if running as a standalone file.
 from pyshell.utils import (
     setup_signal_handlers, setup_history, setup_completer,
-    check_and_cleanup_jobs, needs_multiline, collect_multiline
+    check_and_cleanup_jobs, needs_multiline, collect_multiline, get_prompt
 )
 from pyshell.tokenizer import tokenize
 from pyshell.parser import parse
@@ -61,7 +61,7 @@ THEMES = {
         "name": "Dark Modern",
         "prompt_color": "#569CD6",
         "success": "[#4EC9B0]✓ Success[/]",
-        "error": "[#F44747]✖ Error[/]",
+        "error": "[#F44747]✗ Error[/]",
         "border": "#569CD6",
         "bg_rgb": (30, 30, 30),
         "text_color": "#D4D4D4",
@@ -70,16 +70,39 @@ THEMES = {
         "name": "Light Modern",
         "prompt_color": "#0000FF",  # Blue
         "success": "[#098658]✓ Success[/]",  # Dark Green
-        "error": "[#AF0000]✖ Error[/]",   # Dark Red
+        "error": "[#AF0000]✗ Error[/]",  # Dark Red
         "border": "#007ACC",
         "bg_rgb": (255, 255, 255),  # White
-        "text_color": "#000000",   # Black
+        "text_color": "#000000",  # Black
     }
 }
 
 
 def rgb_to_hex(r, g, b):
     return f"#{r:02x}{g:02x}{b:02x}"
+
+# -------------------------------------------------------------------------
+# Directory and Path Utilities
+# -------------------------------------------------------------------------
+
+
+def get_current_directory():
+    """Get the current working directory in a clean format."""
+    try:
+        cwd = os.getcwd()
+        # Normalize path separators for consistency
+        return cwd.replace('\\', '/')
+    except Exception:
+        return str(Path.home())
+
+
+def format_prompt_with_cwd():
+    """Format the shell prompt with current directory."""
+    cwd = get_current_directory()
+    # Show just the directory name, or full path if desired
+    dir_name = Path(cwd).name or cwd
+    return f"PyShell:{dir_name} > "
+
 
 # -------------------------------------------------------------------------
 # Theme Selection
@@ -109,14 +132,8 @@ def load_theme():
 
 
 def select_theme():
+    # Check if theme is already saved (existing user)
     saved = load_theme()
-    if saved:
-        use_saved = questionary.confirm(
-            f"Use saved theme: [cyan]{saved}[/cyan]?", default=True).ask()
-        if use_saved:
-            return saved
-
-    console.print("\n[bold cyan]✧ Select a PyShell Theme[/bold cyan]\n")
 
     custom_style = questionary.Style([
         ('qmark', 'fg:#569CD6 bold'),
@@ -129,10 +146,28 @@ def select_theme():
         ('disabled', ''),
     ])
 
+    if saved:
+        # MODIFICATION: Ask existing user if they want to use their saved theme.
+        use_saved = questionary.confirm(
+            f"Use saved theme: '{saved}'?",
+            default=True,
+            style=custom_style,
+            qmark="🎨"
+        ).ask()
+
+        if use_saved is None:  # User cancelled with Ctrl+C
+            return saved  # Default to saved theme on cancel
+        if use_saved:
+            return saved
+        # If 'no', fall through to show the full theme selection list.
+
+    # New user OR existing user who wants to change theme
+    console.print("\n[bold cyan]✧ Select a PyShell Theme[/bold cyan]\n")
+
     choices_list = [Choice(t) for t in THEMES.keys()]
 
     theme_choice = questionary.select(
-        "✧ Choose your preferred theme:",
+        "Choose your preferred theme:",
         choices=choices_list,
         qmark="✧",
         pointer="➤",
@@ -155,7 +190,13 @@ def show_intro(theme_name: str) -> None:
     console.clear()
     banner = Text("\n🚀 PyShell", style=THEME['border'])
     subtitle = Text(f"{THEME['name']} Mode\n", style="dim white")
-    console.print(Panel.fit(banner + subtitle, border_style=THEME['border']))
+
+    # Show current directory
+    cwd_text = Text(
+        f"Current Directory: {get_current_directory()}\n", style="dim cyan")
+
+    console.print(Panel.fit(banner + subtitle + cwd_text,
+                            border_style=THEME['border']))
     time.sleep(1)
 
 
@@ -195,7 +236,7 @@ def show_installer_wizard(theme_name: str) -> bool:
         ]
 
     choice = questionary.select(
-        "✧ Select an action:",
+        "Select an action:",
         choices=choices_list,
         qmark="✧",
         pointer="➤",
@@ -210,11 +251,12 @@ def show_installer_wizard(theme_name: str) -> bool:
         return not uninstalled  # Exit if uninstalled successfully
     elif choice == "🚀  Continue to PyShell":
         console.print(f"\n[{THEME['border']}]Launching PyShell...[/]\n")
+        console.print(
+            f"[{THEME['border']}]Starting in: {get_current_directory()}[/]\n")
         return True
     else:  # Exit
         console.print(f"\n[{THEME['border']}]Goodbye! 👋[/]\n")
         return False
-
 
 
 def install_pyshell(theme_name: str) -> None:
@@ -322,15 +364,60 @@ def uninstall_pyshell(theme_name: str) -> bool:
 # -------------------------------------------------------------------------
 # Full-Screen TUI REPL
 # -------------------------------------------------------------------------
+# MODIFICATION: Custom Buffer to create a read-only prompt region.
+class PyShellBuffer(Buffer):
+    """
+    A custom buffer that prevents editing of text before a designated
+    'editable_start_pos'. This makes the prompt and past output read-only.
+    """
+
+    def __init__(self, *args, **kwargs):
+        self.editable_start_pos = 0
+        super().__init__(*args, **kwargs)
+
+    def insert_text(self, data, overwrite=False, move_cursor=True, fire_events=True):
+        # Allow insertion only if the cursor is in the editable area.
+        if self.cursor_position < self.editable_start_pos:
+            self.cursor_position = len(self.text)  # Move cursor to end
+        super().insert_text(data, overwrite, move_cursor, fire_events)
+
+    def delete(self, count=1):
+        # Allow deletion only if the selection starts in the editable area.
+        if self.cursor_position < self.editable_start_pos:
+            return
+        super().delete(count)
+
+    def delete_before_cursor(self, count=1):
+        # Allow backspace only if it doesn't cross into the read-only part.
+        if self.cursor_position > self.editable_start_pos:
+            # Calculate how many characters can be safely deleted.
+            deletable_chars = self.cursor_position - self.editable_start_pos
+            actual_count = min(count, deletable_chars)
+            if actual_count > 0:
+                super().delete_before_cursor(actual_count)
+
+
 def run_shell_tui(theme_name: str):
     THEME = THEMES[theme_name]
+
+    # Initialize shell utilities
+    setup_signal_handlers()
+    setup_history()
+    setup_completer()
+
+    # Set up initial environment
+    os.environ['PWD'] = get_current_directory()
+    state.PS1 = "$ "  # Will be overridden by format_prompt_with_cwd()
+
     # --- Style Configuration ---
     bg_hex = rgb_to_hex(*THEME["bg_rgb"])
     text_hex = THEME["text_color"]
-    prompt_str = "PyShell > "
+
+    def get_prompt_str():
+        """Get current prompt string with directory."""
+        return format_prompt_with_cwd()
 
     style = PromptStyle.from_dict({
-        # A single style for the entire screen background and default text
         '': f'bg:{bg_hex} {text_hex}',
         'prompt': f'bold {THEME["prompt_color"]}',
         'window': f'bg:{bg_hex}',
@@ -344,26 +431,30 @@ def run_shell_tui(theme_name: str):
 
             def get_line(i):
                 line = lines[i]
-                if line.startswith(prompt_str):
-                    return [('class:prompt', prompt_str), ('', line[len(prompt_str):])]
-                else:
-                    return [('', line)]
+                # Check if line starts with any prompt pattern
+                if line.startswith("PyShell:"):
+                    # Find where the prompt ends (after " > ")
+                    prompt_end = line.find(" > ") + 3
+                    if prompt_end > 2:
+                        return [('class:prompt', line[:prompt_end]), ('', line[prompt_end:])]
+                return [('', line)]
             return get_line
 
     # --- Data and Buffers ---
-    # This function finds the start of the editable command area
-    def get_editable_start_pos(buff):
-        text = buff.text
-        last_prompt_index = text.rfind(prompt_str)
-        return last_prompt_index + len(prompt_str) if last_prompt_index != -1 else 0
+    # MODIFICATION: Use the custom PyShellBuffer for read-only prompt behavior.
+    main_buffer = PyShellBuffer()
 
-    # A single buffer for the entire session history and current command
-    main_buffer = Buffer(read_only=False)
-    main_buffer.text = f"Welcome to PyShell! Type 'exit' or press Ctrl+D to quit.\n{prompt_str}"
+    # Initialize with welcome message and first prompt
+    welcome_msg = f"Welcome to PyShell!\nCurrent Directory: {get_current_directory()}\n"
+    welcome_msg += f"Type 'exit' or press Ctrl+D to quit.\n\n"
+    initial_prompt = get_prompt_str()
+
+    main_buffer.text = welcome_msg + initial_prompt
     main_buffer.cursor_position = len(main_buffer.text)
+    # MODIFICATION: Set the initial read-only boundary after the first prompt.
+    main_buffer.editable_start_pos = len(main_buffer.text)
 
     # --- Layout ---
-    # The layout is now just a single window that fills the screen
     root_container = Window(
         content=BufferControl(
             buffer=main_buffer,
@@ -384,19 +475,29 @@ def run_shell_tui(theme_name: str):
     @kb.add('enter')
     def _(event):
         doc = main_buffer.document
-        main_buffer.cursor_position = len(
-            doc.text)  # Ensure cursor is at the end
-        command = doc.text[get_editable_start_pos(main_buffer):].strip()
-        # "Commit" the entered command to history
+        main_buffer.cursor_position = len(doc.text)
+
+        # MODIFICATION: Get command from the editable part of the buffer.
+        command = doc.text[main_buffer.editable_start_pos:].strip()
+
+        # "Commit" the entered command
         main_buffer.insert_text('\n')
+        # MODIFICATION: Lock the submitted command line.
+        main_buffer.editable_start_pos = len(main_buffer.text)
 
         if command.lower() == 'exit':
             event.app.exit()
             return
 
         if not command:
-            main_buffer.insert_text(prompt_str)
+            # Add a new prompt if the user just pressed Enter
+            main_buffer.insert_text(get_prompt_str())
+            main_buffer.editable_start_pos = len(main_buffer.text)
             return
+
+        # Check for directory change commands to update prompt
+        command_lower = command.lower().strip()
+        is_cd_command = command_lower.startswith('cd ')
 
         # Execute command and capture all output
         old_stdout, old_stderr = sys.stdout, sys.stderr
@@ -408,6 +509,7 @@ def run_shell_tui(theme_name: str):
             tokens = tokenize(command)
             ast = parse(tokens)
             exit_code = execute(ast)
+            state.last_exit_status = exit_code
         except Exception as e:
             exit_code = 1
             print(f"Error: {e}")
@@ -418,12 +520,25 @@ def run_shell_tui(theme_name: str):
         if command_output:
             main_buffer.insert_text(command_output + '\n')
 
+        # Check for background jobs
+        check_and_cleanup_jobs()
+
+        # Update environment PWD if directory changed
+        if is_cd_command:
+            os.environ['PWD'] = get_current_directory()
+            # Show the new directory after cd command
+            main_buffer.insert_text(
+                f"[Current Directory: {get_current_directory()}]\n")
+
         # Append success or error message
         msg = THEME["success"] if exit_code == 0 else THEME["error"]
         main_buffer.insert_text(Text.from_markup(msg).plain + '\n')
 
-        # Add the next prompt
-        main_buffer.insert_text(prompt_str)
+        # Add the next prompt (with updated directory)
+        main_buffer.insert_text(get_prompt_str())
+
+        # MODIFICATION: Update the read-only boundary for the new prompt.
+        main_buffer.editable_start_pos = len(main_buffer.text)
 
     # --- Application ---
     app = Application(layout=layout, key_bindings=kb,
@@ -437,6 +552,9 @@ def run_shell_tui(theme_name: str):
 def run_command(command_string: str) -> int:
     try:
         state.non_interactive = True
+        # Ensure we're in the current directory
+        os.environ['PWD'] = get_current_directory()
+
         tokens = tokenize(command_string)
         ast = parse(tokens)
         return execute(ast)
@@ -453,6 +571,10 @@ def run_command(command_string: str) -> int:
 # -------------------------------------------------------------------------
 def main():
     """Main entry point for PyShell when installed as a package."""
+    # Store the original working directory
+    original_cwd = os.getcwd()
+
+    # Handle builtin execution in background
     if len(sys.argv) > 2 and sys.argv[1] == "--run-builtin":
         try:
             sys.exit(execute_builtin(sys.argv[2], sys.argv[3:]))
@@ -461,10 +583,18 @@ def main():
                 f"[bold red]Error in background builtin:[/bold red] {e}")
             sys.exit(1)
 
+    # Handle -c command mode
     elif len(sys.argv) > 2 and sys.argv[1] == "-c":
         sys.exit(run_command(sys.argv[2]))
 
+    # Interactive mode
     else:
+        # Make sure we're in the directory where the shell was launched
+        try:
+            os.chdir(original_cwd)
+        except Exception:
+            pass
+
         theme_name = select_theme()
         show_intro(theme_name)
         should_continue = show_installer_wizard(theme_name)
