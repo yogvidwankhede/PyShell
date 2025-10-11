@@ -52,7 +52,7 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "pyshell=main:repl",
+            "pyshell=main:main",  # Change this - you need a main() function
         ],
     },
 )
