@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="pyshell-terminal",
-    version="1.1.1",  # ⬅ bump version
+    version="1.1.2",  # ⬅ bump version
     author="Yogvid Wankhede",
     author_email="yogvidwankhede@gmail.com",  # must be valid format
     description="A feature-rich, POSIX-compatible shell implemented in Python with advanced scripting capabilities.",
