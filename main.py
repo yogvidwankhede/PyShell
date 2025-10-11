@@ -483,13 +483,13 @@ def run_shell_tui(theme_name: str):
     welcome_msg = f"Welcome to PyShell Enhanced! 🚀\n"
     welcome_msg += f"Current Directory: {get_current_directory()}\n"
     welcome_msg += f"Type 'exit' or press Ctrl+D to quit.\n\n"
-    welcome_msg += f"📝 Navigation Tips:\n"
-    welcome_msg += f"  ↑/↓  - Browse command history\n"
-    welcome_msg += f"  ←/→  - Move cursor\n"
-    welcome_msg += f"  Home/End - Jump to line start/end\n"
-    welcome_msg += f"  Ctrl+A/E - Alternative Home/End\n"
-    welcome_msg += f"  Ctrl+K - Clear current line\n"
-    welcome_msg += f"  Ctrl+L - Clear screen\n\n"
+    # welcome_msg += f"📝 Navigation Tips:\n"
+    # welcome_msg += f"  ↑/↓  - Browse command history\n"
+    # welcome_msg += f"  ←/→  - Move cursor\n"
+    # welcome_msg += f"  Home/End - Jump to line start/end\n"
+    # welcome_msg += f"  Ctrl+A/E - Alternative Home/End\n"
+    # welcome_msg += f"  Ctrl+K - Clear current line\n"
+    # welcome_msg += f"  Ctrl+L - Clear screen\n\n"
 
     initial_prompt = get_prompt_str()
 
