@@ -12,6 +12,16 @@ import atexit
 import shutil
 
 try:
+    import readline
+except ImportError:
+    # On Windows, fallback to pyreadline3
+    try:
+        import pyreadline3 as readline
+    except ImportError:
+        readline = None
+        print("Warning: readline/pyreadline3 not available. History & completion disabled.")
+        
+try:
     import psutil
 except ImportError:
     psutil = None
