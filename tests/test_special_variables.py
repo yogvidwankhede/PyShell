@@ -16,8 +16,9 @@ import subprocess
 import sys
 import os
 
-SHELL_CMD = [sys.executable, "main.py", "-c"]
-
+_test_dir = os.path.dirname(os.path.abspath(__file__))
+_main_py = os.path.join(os.path.dirname(_test_dir), "main.py")
+SHELL_CMD = [sys.executable, _main_py, "-c"]
 
 class TestExitStatus:
     """Test $? special variable."""
