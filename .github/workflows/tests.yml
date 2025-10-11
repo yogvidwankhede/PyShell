@@ -8,17 +8,26 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
+    name: Run Tests
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: [3.9, 3.11]
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: ${{ matrix.python-version }}
+
       - name: Install dependencies
         run: |
-          pip install -U pip
+          pip install --upgrade pip
           pip install -r requirements.txt || pip install pytest
+
       - name: Run tests
         run: pytest -v
