@@ -165,7 +165,8 @@ def show_installer_wizard(theme_name: str) -> bool:
     """
     THEME = THEMES[theme_name]
     console.print(
-        "\n[bold white]Installation wizard for [cyan]PyShell[/cyan][/bold white]\n")
+        "\n[bold white]Installation wizard for [cyan]PyShell[/cyan][/bold white]\n"
+    )
 
     custom_style = questionary.Style([
         ('qmark', 'fg:#569CD6 bold'),
@@ -178,7 +179,20 @@ def show_installer_wizard(theme_name: str) -> bool:
         ('disabled', ''),
     ])
 
-    choices_list = ["🔧  Install PyShell", "🧹  Uninstall PyShell", "🚪  Exit"]
+    install_marker = Path.home() / ".pyshell_installed"
+
+    # Adjust menu based on installation status
+    if install_marker.exists():
+        choices_list = [
+            "🚀  Continue to PyShell",
+            "🧹  Uninstall PyShell",
+            "🚪  Exit"
+        ]
+    else:
+        choices_list = [
+            "🔧  Install PyShell",
+            "🚪  Exit"
+        ]
 
     choice = questionary.select(
         "✧ Select an action:",
@@ -194,9 +208,13 @@ def show_installer_wizard(theme_name: str) -> bool:
     elif choice == "🧹  Uninstall PyShell":
         uninstalled = uninstall_pyshell(theme_name)
         return not uninstalled  # Exit if uninstalled successfully
+    elif choice == "🚀  Continue to PyShell":
+        console.print(f"\n[{THEME['border']}]Launching PyShell...[/]\n")
+        return True
     else:  # Exit
         console.print(f"\n[{THEME['border']}]Goodbye! 👋[/]\n")
         return False
+
 
 
 def install_pyshell(theme_name: str) -> None:
