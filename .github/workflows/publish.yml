@@ -24,13 +24,14 @@ jobs:
         run: |
           pip install --upgrade pip setuptools wheel build twine
 
-      - name: Install core dependencies
+      - name: Install all dependencies
         run: |
-          pip install psutil rich questionary prompt_toolkit pytest
-
-      - name: Install optional dependencies
-        run: |
-          pip install -r requirements.txt || true
+          # Install main dependencies first
+          pip install psutil rich questionary prompt_toolkit
+          # Install testing dependencies
+          pip install pytest pytest-asyncio pytest-benchmark pytest-socket
+          # Try to install optional dependencies, continue if some fail
+          pip install pytest-codspeed pytest-recording syrupy || true
 
       - name: Run tests
         run: |
