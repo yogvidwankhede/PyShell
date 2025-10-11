@@ -152,7 +152,7 @@ def select_theme():
             f"Use saved theme: '{saved}'?",
             default=True,
             style=custom_style,
-            qmark="🎨"
+            qmark="✧"
         ).ask()
 
         if use_saved is None:  # User cancelled with Ctrl+C
