@@ -21,7 +21,7 @@ pytest-benchmark>=4.0.0
 pytest-codspeed>=2.0.0
 pytest-socket>=0.6.0
 pytest-recording>=0.13.0
-pytest-syrupy>=4.0.0
+pytest-syrupy>=2.0.0
 pytest-langsmith>=0.1.0
 pytest-anyio>=0.0.0
 
