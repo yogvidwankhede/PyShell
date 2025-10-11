@@ -2,19 +2,32 @@
 # 🐚 PyShell - Core Dependencies
 # ===================================================
 
-# System monitoring
+# Standard utilities and system monitoring
 psutil>=5.9.0
 
-# UI / CLI Enhancements
+# ===================================================
+# 🎨 UI / CLI Enhancements
+# ===================================================
 rich>=13.7.0
 questionary>=2.0.1
 prompt_toolkit>=3.0.48
 
-# Testing (only what's needed)
+# ===================================================
+# 🧪 Testing and Benchmarking
+# ===================================================
 pytest>=7.0.0
-pytest-cov>=3.0.0
+pytest-asyncio>=0.21.0
+pytest-benchmark>=4.0.0
+pytest-codspeed>=2.0.0
+pytest-socket>=0.6.0
+pytest-recording>=0.13.0
+syrupy>=4.0.0
+pytest-anyio>=0.0.0
 
-# Development tools (optional)
+# ===================================================
+# 🧰 Developer Utilities (optional but recommended)
+# ===================================================
 black>=24.3.0
 isort>=5.13.0
+mypy>=1.8.0
 flake8>=7.0.0
