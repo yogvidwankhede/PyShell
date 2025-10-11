@@ -217,27 +217,6 @@ Contributions are welcome! 🙌
 
 ---
 
-## 📦 Project Links
-
-- **PyPI:** [https://pypi.org/project/pyshell-terminal/](https://pypi.org/project/pyshell-terminal/)
-- **GitHub:** [https://github.com/yogvidwankhede/PyShell](https://github.com/yogvidwankhede/PyShell)
-- **Documentation:** [https://github.com/yogvidwankhede/PyShell/wiki](https://github.com/yogvidwankhede/PyShell/wiki)
-- **Website:** [https://yogvidwankhede.com](https://yogvidwankhede.com)
-
----
-
-## 🧑‍💻 Author
-
-**Yogvid Wankhede**  
-🌐 [https://yogvidwankhede.com](https://yogvidwankhede.com)
-
----
-
-## 📄 License
-
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
-
----
 
 ## 🙏 Acknowledgments
 
