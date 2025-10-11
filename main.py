@@ -431,9 +431,10 @@ def run_command(command_string: str) -> int:
 
 
 # -------------------------------------------------------------------------
-# Entry point
+# Main entry point function (for setup.py console_scripts)
 # -------------------------------------------------------------------------
-if __name__ == "__main__":
+def main():
+    """Main entry point for PyShell when installed as a package."""
     if len(sys.argv) > 2 and sys.argv[1] == "--run-builtin":
         try:
             sys.exit(execute_builtin(sys.argv[2], sys.argv[3:]))
@@ -451,3 +452,10 @@ if __name__ == "__main__":
         should_continue = show_installer_wizard(theme_name)
         if should_continue:
             run_shell_tui(theme_name)
+
+
+# -------------------------------------------------------------------------
+# Entry point when run directly
+# -------------------------------------------------------------------------
+if __name__ == "__main__":
+    main()
