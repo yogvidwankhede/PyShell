@@ -10,15 +10,39 @@ jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.9'
+      
       - name: Install dependencies
         run: |
-          pip install -U pip
-          pip install -r requirements.txt || pip install pytest
+          pip install -U pip setuptools wheel
+          pip install -r requirements.txt
+          pip install -e .
+      
+      - name: Verify installation
+        run: |
+          python -c "import pyshell; print('PyShell package imported successfully')"
+          python -c "import pytest; print(f'Pytest version: {pytest.__version__}')"
+      
+      - name: List test files
+        run: |
+          echo "Test files found:"
+          ls -la tests/
+      
       - name: Run tests
-        run: pytest -v
+        run: |
+          cd tests
+          python run_all_tests.py
+        continue-on-error: false
+      
+      - name: Run pytest directly (fallback)
+        if: failure()
+        run: |
+          pytest tests/ -v --tb=short
