@@ -19,6 +19,14 @@ Cross-platform and extensible, PyShell brings the power of Unix-style scripting 
 
 ---
 
+## A real session
+
+![A real PyShell session: loops, expansion, functions, arrays](docs/screenshots/pyshell-1.webp)
+
+*A real PyShell session: loops, expansion, functions, arrays.*
+
+The text of that session is in [`docs/screenshots/session.txt`](docs/screenshots/session.txt).
+
 ## ✨ Features
 
 - **POSIX Compatibility**: Standard shell syntax (`if`, `while`, `for`, `case`)

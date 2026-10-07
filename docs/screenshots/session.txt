@@ -1,0 +1,14 @@
+$ echo Hello from PyShell
+Hello from PyShell
+$ for i in {1..5}; do echo "square of $i is $((i*i))"; done
+square of 1 is 1
+square of 2 is 4
+square of 3 is 9
+square of 4 is 16
+square of 5 is 25
+$ name=world; echo "Hello ${name:-nobody}, ${#name} letters"
+Hello world, 5 letters
+$ greet() { local who=$1; echo "hi $who"; }; greet Yogvid
+hi Yogvid
+$ fruits=(apple banana cherry); echo "${fruits[1]} of ${#fruits[@]}"
+banana of 3
